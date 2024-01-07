@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Console.Booking/1.0.0": {
+        "dependencies": {
+          "Console.Booking.Core": "1.0.0"
+        },
+        "runtime": {
+          "Console.Booking.dll": {}
+        }
+      },
+      "Console.Booking.Core/1.0.0": {
+        "runtime": {
+          "Console.Booking.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Console.Booking/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Console.Booking.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
