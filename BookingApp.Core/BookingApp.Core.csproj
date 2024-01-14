@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookingApp.Entities\BookingApp.Entities.csproj" />
+    <ProjectReference Include="..\BookingApp.Persistence\BookingApp.Persistence.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
