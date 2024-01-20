@@ -16,10 +16,13 @@ public class Program
 
         //book room with number = 1 by user with id = 1
         Console.WriteLine(service.Book(userId, room1Id));
-        //book room with number = 1 by user with id = 1
+        //book room with number = 2 by user with id = 1
         Console.WriteLine(service.Book(userId, room2Id));
-        //book room with number = 1 by user with id = 1
+        //book room with number = 3 by user with id = 1
         Console.WriteLine(service.Book(userId, room3Id));
+
+        service.CancelBooking(userId, room1Id);
+        service.CancelBooking(userId, room3Id);
 
         //put empty line delimiter
         Console.WriteLine("_________________");
