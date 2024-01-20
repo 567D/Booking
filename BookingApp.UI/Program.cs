@@ -20,7 +20,7 @@ public class Program
         UserService userService = new UserService();
 
         //creation user in real database
-        userService.AddUser(Guid.NewGuid().ToString(), "Daria");
+        //userService.AddUser(Guid.NewGuid().ToString(), "Daria");
 
         //book room with number = 1 by user with id = 1
         Console.WriteLine(bookingService.Book(userId, room1Id));
