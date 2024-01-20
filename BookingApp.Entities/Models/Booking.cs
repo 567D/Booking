@@ -2,10 +2,10 @@
 {
     public class Booking
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int RoomNum { get; set; }
 
-        public Booking(int userId, int roomNum)
+        public Booking(string userId, int roomNum)
         {
             UserId = userId;
             RoomNum = roomNum;
