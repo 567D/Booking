@@ -4,6 +4,12 @@
     <ProjectReference Include="..\BookingApp.Core\BookingApp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Constants\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Constants\" />
+  </ItemGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
