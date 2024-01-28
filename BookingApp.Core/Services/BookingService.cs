@@ -7,38 +7,37 @@ namespace BookingApp.Core.Services
     public class BookingService
     {
         private readonly BookingRepository _bookingRepository;
-        
+        private readonly UserRepository _userRepository;
+
         public BookingService()
         {
             _bookingRepository = new BookingRepository();
+            _userRepository = new UserRepository();
         }
 
         public string Book(string userId, int roomNum)
         {
-            Booking booking = new Booking(userId, roomNum);
+            Booking booking = new Booking(Guid.NewGuid().ToString(), userId, roomNum);
             _bookingRepository.Add(booking);
             return $"Room number {roomNum} is booked by user {userId}";
         }
 
-        public void CancelBooking(string userId, int roomNum)
+        public string CancelBookingsForUser(string userId)
         {
-            var bookings = _bookingRepository.GetByUser(userId);
-            Booking bookingToRemove = bookings.FirstOrDefault(x => x.UserId == userId && x.RoomNum == roomNum);
+            User user = _userRepository.GetById(userId);
+            List<Booking> bookings = _bookingRepository.GetByUserId(userId);
 
-            if (bookingToRemove != null)
+            foreach (var booking in bookings)
             {
-                _bookingRepository.Remove(bookingToRemove);
-                Console.WriteLine($"for room number {roomNum} by user {userId} is canceled");
+                _bookingRepository.Delete(booking);
             }
-            else
-            {
-                Console.WriteLine($"for room number {roomNum} by user {userId} not found");
-            }
+
+            return $"All bookings for user {user.Name} has canceled";
         }
 
         public List<Booking> GetBookings(string userId)
         {
-            var bookings = _bookingRepository.GetByUser(userId);
+            List<Booking> bookings = _bookingRepository.GetByUserId(userId);
             return bookings;
         }
     }

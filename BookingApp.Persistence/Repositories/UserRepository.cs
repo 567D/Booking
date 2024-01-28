@@ -1,21 +1,130 @@
 ﻿using System;
 using BookingApp.Entities.Models;
+using BookingApp.Persistence.Interfaces;
+using Microsoft.Data.Sqlite;
 
 namespace BookingApp.Persistence.Repositories
 {
-	public class UserRepository
-	{
-        private readonly Database _database;
+    public class UserRepository : IRepository<User>
+    {
+        private string _dbConnection = "/Users/araks/programming/Booking/bookingAppDb.db";
 
-        public UserRepository()
-		{
-			_database = new Database();
-		}
+        public void Add(User entity)
+        {
+            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            {
+                connection.Open();
 
-		public void Add(User user)
-		{
-			_database.AddUser(user);
-		}
-	}
+                //create table if not exists
+                CreateTableIfNotExists(connection);
+
+                //insert user to DB
+                SqliteCommand command = new SqliteCommand("INSERT INTO Users(Id, Name) VALUES('" + entity.Id + "', '" + entity.Name + "')", connection);
+
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public void Delete(User entity)
+        {
+            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            {
+                connection.Open();
+
+                //create table if not exists
+                CreateTableIfNotExists(connection);
+
+                //insert user to DB
+                SqliteCommand command = new SqliteCommand("DELETE FROM Users where Id = '" + entity.Id + "'", connection);
+
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            {
+                connection.Open();
+
+                //create table if not exists
+                CreateTableIfNotExists(connection);
+
+                string sql = "select * from Users";
+                SqliteCommand command = new SqliteCommand(sql, connection);
+                SqliteDataReader dataReader = command.ExecuteReader();
+
+                List<User> users = new List<User>();
+                
+                while (dataReader.Read())
+                {
+                    users.Add(new User
+                    {
+                        Id = dataReader.GetString(0),
+                        Name = dataReader.GetString(1)
+                    });
+                }
+
+                connection.Close();
+                return users;
+            }
+        }
+
+        public User GetById(string id)
+        {
+            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            {
+                connection.Open();
+
+                //create table if not exists
+                CreateTableIfNotExists(connection);
+
+                string sql = "select * from Users where Id = '"+ id +"'";
+                SqliteCommand command = new SqliteCommand(sql, connection);
+                SqliteDataReader dataReader = command.ExecuteReader();
+
+                List<User> users = new List<User>();
+
+                while (dataReader.Read())
+                {
+                    users.Add(new User
+                    {
+                        Id = dataReader.GetString(0),
+                        Name = dataReader.GetString(1)
+                    });
+                }
+
+                connection.Close();
+                return users.FirstOrDefault();
+            }
+        }
+
+        public void Update(User entity)
+        {
+            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            {
+                connection.Open();
+
+                //create table if not exists
+                CreateTableIfNotExists(connection);
+
+                //insert user to DB
+                SqliteCommand command = new SqliteCommand("UPDATE Users SET Name = '" + entity.Name + "' where Id = '" + entity.Id + "'", connection);
+
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        private void CreateTableIfNotExists(SqliteConnection connection)
+        {
+            //create table if not exists
+            string createTableQuery = "CREATE TABLE IF NOT EXISTS Users (Id TEXT, Name TEXT NOT NULL, PRIMARY KEY(Id))";
+            SqliteCommand createCommand = new SqliteCommand(createTableQuery, connection);
+            createCommand.ExecuteNonQuery();
+        }
+    }
 }
 

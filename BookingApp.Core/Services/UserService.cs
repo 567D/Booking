@@ -20,6 +20,11 @@ namespace BookingApp.Core.Services
             user.Name = name;
             _userRepository.Add(user);
         }
+
+        public User Get(string userid)
+        {
+            return _userRepository.GetById(userid);
+        }
 	}
 }
 

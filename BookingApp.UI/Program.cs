@@ -6,59 +6,47 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        //define variables
-        string userId = "1";
-        int room1Id = 1;
-        int room2Id = 2;
-        int room3Id = 3;
+        var userService = new UserService();
+        var bookingService = new BookingService();
+        var userId = Guid.NewGuid().ToString();
 
-        //create service for bookings
-        BookingService bookingService = new BookingService();
+        userService.AddUser(userId, "Dariya");
 
-        //create service for users
-        UserService userService = new UserService();
-
-        //creation user in real database
-        //userService.AddUser(Guid.NewGuid().ToString(), "Daria");
-
-        //book room with number = 1 by user with id = 1
-        Console.WriteLine(bookingService.Book(userId, room1Id));
-        //book room with number = 2 by user with id = 1
-        Console.WriteLine(bookingService.Book(userId, room2Id));
-        //book room with number = 3 by user with id = 1
-        Console.WriteLine(bookingService.Book(userId, room3Id));
-
-        bookingService.CancelBooking(userId, room1Id);
-        bookingService.CancelBooking(userId, room3Id);
-
-        //put empty line delimiter
-        Console.WriteLine("_________________");
+        User user = userService.Get(userId);
+        Console.WriteLine("User created successfully");
+        Console.WriteLine($"Name  = {user.Name}, id = {user.Id}");
         Console.WriteLine();
-
-        //get bookings by user id = 1
-        List<Booking> bookings = bookingService.GetBookings(userId);
-
-        //show bookings from user with id = 1
-        ShowBookings(bookings);
 
         bool exit = false;
 
         while(!exit)
         {
+            Console.WriteLine();
             Console.WriteLine("Enter a command (create, get, cancel, exit):");
             Console.WriteLine();
-            string command = Console.ReadLine().ToLower();
+            string commandText = Console.ReadLine().ToLower();
+            string command = commandText.Split(' ')[0];
 
             switch (command)
             {
                 case UICommands.GET:
-                    Console.WriteLine($"{nameof(Booking)} { UICommands.GET}");
+                    var getUserId = commandText.Split(' ')[1];
+                    List<Booking> getBookings = bookingService.GetBookings(userId);
+
+                    foreach (var booking in getBookings)
+                    {
+                        Console.WriteLine($"Booking Id = { booking.Id }, RoomNum = { booking.RoomNum }, UserId = { booking.UserId }");
+                    }
+
                     break;
                 case UICommands.CREATE:
-                    Console.WriteLine($"{nameof(Booking)} {UICommands.CREATE}");
+                    var createUserId = commandText.Split(' ')[1];
+                    var createRoomNum = int.Parse(commandText.Split(' ')[2]);
+                    bookingService.Book(createUserId, createRoomNum);
                     break;
                 case UICommands.CANCEL:
-                    Console.WriteLine($"{nameof(Booking)} {UICommands.CANCEL}");
+                    var cancelUserId = commandText.Split(' ')[1];
+                    bookingService.CancelBookingsForUser(userId);
                     break;
                 case UICommands.EXIT:
                     exit = true;
