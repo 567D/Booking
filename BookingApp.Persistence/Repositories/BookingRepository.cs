@@ -20,7 +20,7 @@ namespace BookingApp.Persistence.Repositories
         {
             _database.Bookings.Remove(booking);
         }
-        public List<Booking> GetByUser(int userId)
+        public List<Booking> GetByUser(string userId)
         {
             return _database.Bookings.Where(b => b.UserId == userId).ToList();
         }

@@ -13,14 +13,14 @@ namespace BookingApp.Core.Services
             _bookingRepository = new BookingRepository();
         }
 
-        public string Book(int userId, int roomNum)
+        public string Book(string userId, int roomNum)
         {
             Booking booking = new Booking(userId, roomNum);
             _bookingRepository.Add(booking);
             return $"Room number {roomNum} is booked by user {userId}";
         }
 
-        public void CancelBooking(int userId, int roomNum)
+        public void CancelBooking(string userId, int roomNum)
         {
             var bookings = _bookingRepository.GetByUser(userId);
             Booking bookingToRemove = bookings.FirstOrDefault(x => x.UserId == userId && x.RoomNum == roomNum);
@@ -36,7 +36,7 @@ namespace BookingApp.Core.Services
             }
         }
 
-        public List<Booking> GetBookings(int userId)
+        public List<Booking> GetBookings(string userId)
         {
             var bookings = _bookingRepository.GetByUser(userId);
             return bookings;
