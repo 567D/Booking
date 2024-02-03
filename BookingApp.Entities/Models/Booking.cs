@@ -6,6 +6,10 @@
         public string UserId { get; set; }
         public int RoomNum { get; set; }
 
+        public Booking()
+        {
+        }
+
         public Booking(string id, string userId, int roomNum)
         {
             Id = id;

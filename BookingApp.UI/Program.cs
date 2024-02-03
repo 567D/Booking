@@ -22,7 +22,7 @@ public class Program
         while(!exit)
         {
             Console.WriteLine();
-            Console.WriteLine("Enter a command (create, get, cancel, exit):");
+            Console.WriteLine("Enter a command (create, get, getbooking, cancel, exit):");
             Console.WriteLine();
             string commandText = Console.ReadLine().ToLower();
             string command = commandText.Split(' ')[0];
@@ -30,32 +30,50 @@ public class Program
             switch (command)
             {
                 case UICommands.GET:
-                    var getUserId = commandText.Split(' ')[1];
-                    List<Booking> getBookings = bookingService.GetBookings(userId);
-
-                    foreach (var booking in getBookings)
                     {
-                        Console.WriteLine($"Booking Id = { booking.Id }, RoomNum = { booking.RoomNum }, UserId = { booking.UserId }");
-                    }
+                        var getUserId = commandText.Split(' ')[1];
+                        List<Booking> getBookings = bookingService.GetBookings(getUserId);
 
-                    break;
+                        foreach (var booking in getBookings)
+                        {
+                            Console.WriteLine($"Booking Id = {booking.Id}, RoomNum = {booking.RoomNum}, UserId = {booking.UserId}");
+                        }
+
+                        break;
+                    }
+                case UICommands.GETBOOKING:
+                    {
+                        var bookingId = commandText.Split(' ')[1];
+                        Booking booking = bookingService.Get(bookingId);
+                        Console.WriteLine($"Booking Id = {booking.Id}, RoomNum = {booking.RoomNum}, UserId = {booking.UserId}");
+                        break;
+                    }
                 case UICommands.CREATE:
-                    var createUserId = commandText.Split(' ')[1];
-                    var createRoomNum = int.Parse(commandText.Split(' ')[2]);
-                    bookingService.Book(createUserId, createRoomNum);
-                    break;
+                    {
+                        var createUserId = commandText.Split(' ')[1];
+                        var createRoomNum = int.Parse(commandText.Split(' ')[2]);
+                        string result = bookingService.Book(createUserId, createRoomNum);
+                        Console.WriteLine(result);
+                        break;
+                    }
                 case UICommands.CANCEL:
-                    var cancelUserId = commandText.Split(' ')[1];
-                    bookingService.CancelBookingsForUser(userId);
-                    break;
+                    {
+                        var cancelUserId = commandText.Split(' ')[1];
+                        bookingService.CancelBookingsForUser(userId);
+                        break;
+                    }
                 case UICommands.EXIT:
-                    exit = true;
-                    Console.WriteLine($"{nameof(Booking)} {UICommands.GET}");
-                    break;
+                    {
+                        exit = true;
+                        Console.WriteLine($"{nameof(Booking)} {UICommands.GET}");
+                        break;
+                    }
                 default:
-                    Console.WriteLine($"Unknown command, please retry with {UICommands.GET}, {UICommands.CREATE}, {UICommands.CANCEL}, {UICommands.EXIT} command");
-                    Console.WriteLine();
-                    break;
+                    {
+                        Console.WriteLine($"Unknown command, please retry with {UICommands.GET}, {UICommands.CREATE}, {UICommands.CANCEL}, {UICommands.EXIT} command");
+                        Console.WriteLine();
+                        break;
+                    }
             }
         }
 

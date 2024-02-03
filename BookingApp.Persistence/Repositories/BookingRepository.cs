@@ -135,6 +135,36 @@ namespace BookingApp.Persistence.Repositories
             }
         }
 
+        public Booking Get(string id)
+        {
+            Booking booking = new();
+
+            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            {
+                connection.Open();
+
+                //create table if not exists
+                CreateTableIfNotExists(connection);
+
+                string sql = $"select Id, UserId, RoomNum from Bookings where Id ='{id}'";
+                SqliteCommand command = new SqliteCommand(sql, connection);
+
+                //we have data in memory at this moment
+                SqliteDataReader dataReader = command.ExecuteReader();
+
+                
+
+                if(dataReader.Read())
+                {
+                    booking.Id = dataReader.GetString(0);
+                    booking.UserId = dataReader.GetString(1);
+                    booking.RoomNum = int.Parse(dataReader.GetString(2));
+                }
+            }
+
+            return booking;
+        }
+
         private void CreateTableIfNotExists(SqliteConnection connection)
         {
             //create table if not exists

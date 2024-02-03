@@ -17,9 +17,10 @@ namespace BookingApp.Core.Services
 
         public string Book(string userId, int roomNum)
         {
-            Booking booking = new Booking(Guid.NewGuid().ToString(), userId, roomNum);
+            string bookingId = Guid.NewGuid().ToString();
+            Booking booking = new Booking(bookingId, userId, roomNum);
             _bookingRepository.Add(booking);
-            return $"Room number {roomNum} is booked by user {userId}";
+            return $"Room number {roomNum} is booked by user {userId}, bookingId = {bookingId}";
         }
 
         public string CancelBookingsForUser(string userId)
@@ -39,6 +40,11 @@ namespace BookingApp.Core.Services
         {
             List<Booking> bookings = _bookingRepository.GetByUserId(userId);
             return bookings;
+        }
+
+        public Booking Get(string id)
+        {
+            return _bookingRepository.Get(id);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace BookingApp.UI.Constants
         public const string CANCEL = "cancel";
         public const string GET = "get";
         public const string EXIT = "exit";
+        public const string GETBOOKING = "getbooking";
     }
 }
 
