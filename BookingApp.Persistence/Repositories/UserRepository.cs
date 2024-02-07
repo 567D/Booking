@@ -125,7 +125,7 @@ namespace BookingApp.Persistence.Repositories
 
         public List<User> GetUsersByRoomNum(int roomNum)
         {
-            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
                 CreateTableIfNotExists(connection);

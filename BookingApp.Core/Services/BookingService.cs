@@ -1,11 +1,6 @@
 ﻿using BookingApp.Core.Abstractions;
 using BookingApp.Entities.Models;
 using BookingApp.Persistence.Abstractions;
-using BookingApp.Persistence;
-using BookingApp.Persistence.Repositories;
-using Microsoft.Data.Sqlite;
-using System.Runtime.InteropServices;
-
 
 namespace BookingApp.Core.Services
 {
