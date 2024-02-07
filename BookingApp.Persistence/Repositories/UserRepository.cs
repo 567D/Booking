@@ -118,6 +118,29 @@ namespace BookingApp.Persistence.Repositories
             }
         }
 
+        public List<User> GetUsersByRoomNum(int roomNum)
+        {
+            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            {
+                connection.Open();
+                CreateTableIfNotExists(connection);
+                string sql = $"select u.Id, u.Name from Users u join Bookings b on u.Id = b.UserId where b.RoomNum = '{roomNum}'";
+                SqliteCommand command = new SqliteCommand(sql, connection);
+                SqliteDataReader dataReader = command.ExecuteReader();
+                List<User> userList = new List<User>();
+                while (dataReader.Read())
+                {
+                    userList.Add(new User
+                    {
+                        Id = dataReader.GetString(0),
+                        Name = dataReader.GetString(1)
+                    });
+                }
+                connection.Close();
+                return userList;
+            }
+        }
+
         private void CreateTableIfNotExists(SqliteConnection connection)
         {
             //create table if not exists

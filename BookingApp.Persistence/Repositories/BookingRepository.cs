@@ -174,4 +174,3 @@ namespace BookingApp.Persistence.Repositories
         }
     }
 }
-
