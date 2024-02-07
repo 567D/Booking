@@ -1,5 +1,6 @@
 ﻿using System;
-namespace BookingApp.Persistence.Interfaces
+
+namespace BookingApp.Persistence.Abstractions
 {
 	public interface IRepository<T>
 	{

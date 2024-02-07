@@ -5,6 +5,12 @@
     <ProjectReference Include="..\BookingApp.Persistence\BookingApp.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Abstractions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

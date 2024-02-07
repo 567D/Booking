@@ -1,17 +1,22 @@
-﻿using System;
-using BookingApp.Entities.Models;
+﻿using BookingApp.Entities.Models;
 using Microsoft.Data.Sqlite;
-using BookingApp.Persistence.Interfaces;
+using Microsoft.Extensions.Configuration;
+using BookingApp.Persistence.Abstractions;
 
 namespace BookingApp.Persistence.Repositories
 {
-    public class BookingRepository : IRepository<Booking>
+    public class BookingRepository : IBookingRepository
     {
-        private string _dbConnection = "/Users/araks/programming/Booking/bookingAppDb.db";
+        private readonly string _connectionString;
+
+        public BookingRepository(IConfiguration configuration)
+        {
+            _connectionString = configuration?.GetConnectionString("DefaultConnection") ?? throw new ArgumentNullException(nameof(configuration));
+        }
 
         public void Add(Booking entity)
         {
-            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
 
@@ -28,7 +33,7 @@ namespace BookingApp.Persistence.Repositories
 
         public void Delete(Booking entity)
         {
-            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
 
@@ -45,7 +50,7 @@ namespace BookingApp.Persistence.Repositories
 
         public IEnumerable<Booking> GetAll()
         {
-            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
 
@@ -70,7 +75,7 @@ namespace BookingApp.Persistence.Repositories
 
         public Booking GetById(string id)
         {
-            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
 
@@ -95,7 +100,7 @@ namespace BookingApp.Persistence.Repositories
 
         public void Update(Booking entity)
         {
-            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
 
@@ -112,7 +117,7 @@ namespace BookingApp.Persistence.Repositories
 
         public List<Booking> GetByUserId(string userId)
         {
-            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
 
@@ -139,7 +144,7 @@ namespace BookingApp.Persistence.Repositories
         {
             Booking booking = new();
 
-            using (var connection = new SqliteConnection($"Data source={_dbConnection}"))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
 
