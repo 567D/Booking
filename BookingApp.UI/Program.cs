@@ -20,6 +20,8 @@ public class Program
 
         userService.Add(userId, "Pavel");
 
+        userService.UpdateUser(userId, "Daria");
+
         User user = userService.Get(userId);
         Console.WriteLine("User created successfully");
         Console.WriteLine($"Name  = {user.Name}, id = {user.Id}");
