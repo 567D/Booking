@@ -25,6 +25,7 @@ nupkg/
 *.user
 *.userosscache
 *.sln.docstates
+*.db
 
 # Build results
 [Dd]ebug/
@@ -41,6 +42,3 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-
-# Database files
-*.db

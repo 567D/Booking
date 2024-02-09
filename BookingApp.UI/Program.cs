@@ -6,13 +6,16 @@ using BookingApp.Persistence.Repositories;
 using BookingApp.UI.Constants;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 public class Program
 {
     public static void Main(string[] args)
     {
-
-        ServiceProvider serviceProvider = ConfigureServices(new ServiceCollection(), args);
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+        ServiceProvider serviceProvider = ConfigureServices(builder, new ServiceCollection(), args);
+        ConfigureLogger(builder);
 
         var userService = serviceProvider.GetService<IUserService>();
         var bookingService = serviceProvider.GetService<IBookingService>();
@@ -100,9 +103,9 @@ public class Program
         }
     }
 
-    private static ServiceProvider ConfigureServices(IServiceCollection services, string[] args)
+    private static ServiceProvider ConfigureServices(IConfigurationBuilder builder, IServiceCollection services, string[] args)
     {
-        IConfiguration configuration = new ConfigurationBuilder()
+        IConfiguration configuration = builder
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ENVIRONMENT")}.json", optional: true, reloadOnChange: true)
@@ -115,9 +118,21 @@ public class Program
         services.AddSingleton<IBookingRepository, BookingRepository>();
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IBookingService, BookingService>();
+        services.AddLogging(x => x.AddSerilog());
         //add new DI dependecies here
 
         return services.BuildServiceProvider();
+    }
+
+    private static void ConfigureLogger(ConfigurationBuilder builder)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(builder.Build())
+            .Enrich.FromLogContext()
+            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
+            .CreateLogger();
+
+        Log.Logger.Information("BookingApp console started");
     }
 }
 

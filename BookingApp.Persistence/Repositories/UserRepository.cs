@@ -2,16 +2,19 @@
 using BookingApp.Persistence.Abstractions;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace BookingApp.Persistence.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private readonly string _connectionString;
+        private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(IConfiguration configuration)
+        public UserRepository(IConfiguration configuration, ILogger<UserRepository> logger)
         {
             _connectionString = configuration?.GetConnectionString("DefaultConnection") ?? throw new ArgumentNullException(nameof(configuration));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public void Add(User entity)
@@ -29,6 +32,8 @@ namespace BookingApp.Persistence.Repositories
                 command.ExecuteNonQuery();
                 connection.Close();
             }
+
+            _logger.LogInformation($"{nameof(User)} with name: {entity.Name} added to db");
         }
 
         public void Delete(User entity)
