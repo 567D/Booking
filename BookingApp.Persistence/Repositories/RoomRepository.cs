@@ -59,8 +59,12 @@ namespace BookingApp.Persistence.Repositories
             using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
-
+                //create table if not exists
                 CreateTableIfNotExists(connection);
+
+                //insert room to DB
+                SqliteCommand command = new SqliteCommand($"INSERT INTO Rooms(Id, Num, SquareMeters, Capacity, NumberOfBeds, Floor, PricePerNight) VALUES('{room.Id}', {room.Num}, {room.SquareMeters}, {room.Capacity}, {room.NumberOfBeds}, {room.Floor}, {room.PricePerNight})", connection);
+                command.ExecuteNonQuery();
 
                 connection.Close();
             }
