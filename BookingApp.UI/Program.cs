@@ -20,14 +20,32 @@ public class Program
         var userService = serviceProvider.GetService<IUserService>();
         var bookingService = serviceProvider.GetService<IBookingService>();
         var userId = Guid.NewGuid().ToString();
+        string email = "pavel@gmail.com";
+        string name = "Pavel";
+        List<User> users = userService.GetAll();
 
-        userService.Add(userId, "Pavel");
+        bool userIsExists = false;
 
-        userService.UpdateUser(userId, "Daria");
+        foreach (User u in users)
+        {
+            if(u.Email.ToLower() == email.ToLower())
+            {
+                userIsExists = true;
+            }
+        }
 
-        User user = userService.Get(userId);
-        Console.WriteLine("User created successfully");
-        Console.WriteLine($"Name  = {user.Name}, id = {user.Id}");
+        if (!userIsExists)
+        {
+            userService.Add(userId, name, email);
+            User user = userService.Get(userId);
+            Console.WriteLine("User created successfully");
+            Console.WriteLine($"Name  = {user.Name}, id = {user.Id}, Email = { user.Email}");
+        }
+        else
+        {
+            Console.WriteLine($"User {name} with email {email} has already existed");    
+        }
+
         Console.WriteLine();
 
         bool exit = false;

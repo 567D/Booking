@@ -27,7 +27,7 @@ namespace BookingApp.Persistence.Repositories
                 CreateTableIfNotExists(connection);
 
                 //insert user to DB
-                SqliteCommand command = new SqliteCommand("INSERT INTO Users(Id, Name) VALUES('" + entity.Id + "', '" + entity.Name + "')", connection);
+                SqliteCommand command = new SqliteCommand("INSERT INTO Users(Id, Name, Email) VALUES('" + entity.Id + "', '" + entity.Name + "', '" + entity.Email + "')", connection);
 
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -73,7 +73,8 @@ namespace BookingApp.Persistence.Repositories
                     users.Add(new User
                     {
                         Id = dataReader.GetString(0),
-                        Name = dataReader.GetString(1)
+                        Name = dataReader.GetString(1),
+                        Email = dataReader.GetString(2)
                     });
                 }
 
@@ -102,7 +103,8 @@ namespace BookingApp.Persistence.Repositories
                     users.Add(new User
                     {
                         Id = dataReader.GetString(0),
-                        Name = dataReader.GetString(1)
+                        Name = dataReader.GetString(1),
+                        Email = dataReader.GetString(2)
                     });
                 }
 
@@ -121,7 +123,7 @@ namespace BookingApp.Persistence.Repositories
                 CreateTableIfNotExists(connection);
 
                 //insert user to DB
-                SqliteCommand command = new SqliteCommand("UPDATE Users SET Name = '" + entity.Name + "' where Id = '" + entity.Id + "'", connection);
+                SqliteCommand command = new SqliteCommand("UPDATE Users SET Name = '" + entity.Name + "', Email = '" + entity.Email +"' where Id = '" + entity.Id + "'", connection);
 
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -143,7 +145,8 @@ namespace BookingApp.Persistence.Repositories
                     userList.Add(new User
                     {
                         Id = dataReader.GetString(0),
-                        Name = dataReader.GetString(1)
+                        Name = dataReader.GetString(1),
+                        Email = dataReader.GetString(2)
                     });
                 }
                 connection.Close();
@@ -154,7 +157,7 @@ namespace BookingApp.Persistence.Repositories
         private void CreateTableIfNotExists(SqliteConnection connection)
         {
             //create table if not exists
-            string createTableQuery = "CREATE TABLE IF NOT EXISTS Users (Id TEXT, Name TEXT NOT NULL, PRIMARY KEY(Id))";
+            string createTableQuery = "CREATE TABLE IF NOT EXISTS Users (Id TEXT, Name TEXT NOT NULL, Email TEXT NOT NULL, PRIMARY KEY(Id))";
             SqliteCommand createCommand = new SqliteCommand(createTableQuery, connection);
             createCommand.ExecuteNonQuery();
         }
