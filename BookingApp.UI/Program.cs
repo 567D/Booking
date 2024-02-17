@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using System.Security.Cryptography.X509Certificates;
 
 public class Program
 {
@@ -19,34 +20,16 @@ public class Program
 
         var userService = serviceProvider.GetService<IUserService>();
         var bookingService = serviceProvider.GetService<IBookingService>();
-        var userId = Guid.NewGuid().ToString();
+
         string email = "pavel@gmail.com";
         string name = "Pavel";
-        List<User> users = userService.GetAll();
 
-        bool userIsExists = false;
 
-        foreach (User u in users)
-        {
-            if(u.Email.ToLower() == email.ToLower())
-            {
-                userIsExists = true;
-            }
-        }
 
-        if (!userIsExists)
-        {
-            userService.Add(userId, name, email);
-            User user = userService.Get(userId);
-            Console.WriteLine("User created successfully");
-            Console.WriteLine($"Name  = {user.Name}, id = {user.Id}, Email = { user.Email}");
-        }
-        else
-        {
-            Console.WriteLine($"User {name} with email {email} has already existed");    
-        }
-
-        Console.WriteLine();
+            //Console.WriteLine("User created successfully");
+            //Console.WriteLine($"Name  = {user.Name}, id = {user.Id}, Email = {user.Email}");
+            //Console.WriteLine($"User {name} with email {email} has already existed");
+            //Console.WriteLine();
 
         bool exit = false;
 
@@ -90,7 +73,7 @@ public class Program
                 case UICommands.CANCEL:
                     {
                         var cancelUserId = commandText.Split(' ')[1];
-                        bookingService.Cancel(userId);
+                        //bookingService.Cancel(userId);
                         break;
                     }
                 case UICommands.EXIT:

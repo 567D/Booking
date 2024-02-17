@@ -13,15 +13,6 @@ namespace BookingApp.Core.Services
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        public void Add(string id, string name, string email)
-        {
-            var user = new User();
-            user.Id = id;
-            user.Name = name;
-            user.Email = email;
-            _userRepository.Add(user);
-        }
-
         public User Get(string id)
         {
             return _userRepository.GetById(id);
@@ -43,6 +34,32 @@ namespace BookingApp.Core.Services
         public List<User> GetAll()
         {
             return _userRepository.GetAll().ToList();
+        }
+
+        public bool CreateUser(string name, string email)
+        {
+            List<User> users = _userRepository.GetAll().ToList();
+            bool userIsExists = false;
+            bool userCreated = false;
+
+            foreach (User u in users)
+            {
+                if (u.Email.ToLower() == email.ToLower())
+                {
+                    userIsExists = true;
+                }
+            }
+
+            if (!userIsExists)
+            {
+                User user = new User();
+                user.Name = name;
+                user.Email = email;
+                user.Id = Guid.NewGuid().ToString();
+                userCreated = true;
+            }
+
+            return userCreated;
         }
     }
 }
